@@ -3,13 +3,24 @@ import { ArrowDown, Download, Send, Sparkles, Code2, Brain, FileText } from 'luc
 import { PERSONAL_INFO } from '../data/portfolioData';
 import ProfilePortrait from './ProfilePortrait';
 import RevealOnScroll from './RevealOnScroll';
-import { downloadResumePdf } from '../utils/generateResumePdf';
 
 interface HeroProps {
   onOpenResume: () => void;
 }
 
 export default function Hero({ onOpenResume }: HeroProps) {
+  const [isDownloading, setIsDownloading] = React.useState(false);
+
+  const handleDownloadResume = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    try {
+      const { downloadResumePdf } = await import('../utils/generateResumePdf');
+      downloadResumePdf();
+    } finally {
+      setIsDownloading(false);
+    }
+  };
   const scrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -133,13 +144,14 @@ export default function Hero({ onOpenResume }: HeroProps) {
 
                 {/* Download Resume Option */}
                 <button
-                  onClick={downloadResumePdf}
+                  onClick={handleDownloadResume}
+                  disabled={isDownloading}
                   type="button"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#FFF2EB] hover:bg-[#FFE6DC] text-[#3D2218] border border-[#FFCBB8] font-semibold text-sm shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#FFF2EB] hover:bg-[#FFE6DC] text-[#3D2218] border border-[#FFCBB8] font-semibold text-sm shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer disabled:opacity-70"
                   title="Download ATS-friendly PDF resume"
                 >
-                  <Download className="w-4 h-4 text-[#E66840]" />
-                  <span>Download Resume</span>
+                  <Download className={`w-4 h-4 text-[#E66840] ${isDownloading ? 'animate-bounce' : ''}`} />
+                  <span>{isDownloading ? 'Preparing...' : 'Download Resume'}</span>
                 </button>
 
                 {/* Additional CTA */}

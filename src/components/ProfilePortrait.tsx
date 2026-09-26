@@ -1,5 +1,7 @@
 import { Sparkles } from 'lucide-react';
-import profilePhoto from '../sarthik-profile.jpg.png';
+import profilePhotoWebp from '../sarthik-profile.webp';
+import profilePhoto400Webp from '../sarthik-profile-400w.webp';
+import profilePhotoPng from '../sarthik-profile.jpg.png';
 
 export default function ProfilePortrait() {
   return (
@@ -99,15 +101,34 @@ export default function ProfilePortrait() {
 
         <div className="relative p-2 rounded-[26px] bg-gradient-to-b from-[#FFF9F6] via-[#FFEDE6] to-[#FFE2D6] border border-[#FFC8B8]">
           <div className="relative rounded-[19px] overflow-hidden bg-[#FAF3EC] border border-[#FFBCA6]/70 shadow-inner">
-            <div className="relative w-full aspect-[3/4.1] overflow-hidden flex items-center justify-center bg-[#FAF3EC]">
-              {/* Exact photograph imported from src/sarthik-profile.jpg.png */}
-              <img
-                src={profilePhoto}
-                alt="Sarthik Adepu"
-                className="w-full h-full object-cover object-top select-none"
-                loading="eager"
-                decoding="async"
-              />
+            <div className="relative w-full aspect-[649/856] overflow-hidden flex items-center justify-center bg-[#FAF3EC]">
+              {/* High-performance responsive picture tag for actual photograph */}
+              <picture className="w-full h-full block">
+                {/* Modern WebP format with responsive srcset */}
+                <source
+                  type="image/webp"
+                  srcSet={`${profilePhoto400Webp} 400w, ${profilePhotoWebp} 649w`}
+                  sizes="(max-width: 640px) 340px, (max-width: 1024px) 390px, 420px"
+                />
+                {/* Original PNG fallback */}
+                <source
+                  type="image/png"
+                  srcSet={profilePhotoPng}
+                />
+                {/* High priority above-the-fold image with explicit dimensions */}
+                <img
+                  src={profilePhotoWebp}
+                  srcSet={`${profilePhoto400Webp} 400w, ${profilePhotoWebp} 649w`}
+                  sizes="(max-width: 640px) 340px, (max-width: 1024px) 390px, 420px"
+                  width={649}
+                  height={856}
+                  alt="Sarthik Adepu"
+                  fetchPriority="high"
+                  decoding="async"
+                  loading="eager"
+                  className="w-full h-full object-cover object-top select-none"
+                />
+              </picture>
             </div>
           </div>
         </div>

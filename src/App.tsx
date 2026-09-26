@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import ScrollProgress from './components/ScrollProgress';
 import SubtlePeachSparkles from './components/SubtlePeachSparkles';
 import Navbar from './components/Navbar';
@@ -18,8 +18,10 @@ import Roadmap from './components/Roadmap';
 import PreContactCTA from './components/PreContactCTA';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ResumeModal from './components/ResumeModal';
 import FloatingMobileContact from './components/FloatingMobileContact';
+
+// Code-split heavy Resume modal
+const ResumeModal = lazy(() => import('./components/ResumeModal'));
 
 export default function App() {
   const [resumeOpen, setResumeOpen] = useState(false);
@@ -86,8 +88,12 @@ export default function App() {
       {/* Footer */}
       <Footer />
 
-      {/* ATS-Friendly One-Page Resume Modal */}
-      <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} />
+      {/* ATS-Friendly One-Page Resume Modal (Lazy Loaded) */}
+      {resumeOpen && (
+        <Suspense fallback={null}>
+          <ResumeModal isOpen={resumeOpen} onClose={() => setResumeOpen(false)} />
+        </Suspense>
+      )}
 
       {/* Floating Contact Button — Mobile Devices Only */}
       <FloatingMobileContact />

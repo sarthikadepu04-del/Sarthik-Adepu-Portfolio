@@ -24,23 +24,34 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 20;
+          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
 
-      // Determine active section
-      const sectionIds = NAV_ITEMS.map((item) => item.href.substring(1));
-      const scrollPosition = window.scrollY + 200;
+          // Determine active section
+          const sectionIds = NAV_ITEMS.map((item) => item.href.substring(1));
+          const scrollPosition = window.scrollY + 200;
 
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sectionIds[i]);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(sectionIds[i]);
-          break;
-        }
+          for (let i = sectionIds.length - 1; i >= 0; i--) {
+            const section = document.getElementById(sectionIds[i]);
+            if (section && section.offsetTop <= scrollPosition) {
+              const currentId = sectionIds[i];
+              setActiveSection((prev) => (prev !== currentId ? currentId : prev));
+              break;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

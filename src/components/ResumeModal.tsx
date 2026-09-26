@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { X, Printer, Download, Check, Copy, ExternalLink, Mail, MapPin, FileDown } from 'lucide-react';
-import { downloadResumePdf } from '../utils/generateResumePdf';
 import {
   PERSONAL_INFO,
   EDUCATION_DATA,
@@ -18,8 +17,20 @@ interface ResumeModalProps {
 
 export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
   const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   if (!isOpen) return null;
+
+  const handleDownloadPdf = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    try {
+      const { downloadResumePdf } = await import('../utils/generateResumePdf');
+      downloadResumePdf();
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -148,12 +159,13 @@ WORKSHOPS & ACTIVITIES
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={downloadResumePdf}
+              onClick={handleDownloadPdf}
+              disabled={isDownloading}
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#E66840] text-white hover:bg-[#D4552E] transition-colors shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#E66840] text-white hover:bg-[#D4552E] transition-colors shadow-xs cursor-pointer disabled:opacity-70"
             >
-              <FileDown className="w-3.5 h-3.5" />
-              <span>Download PDF</span>
+              <FileDown className={`w-3.5 h-3.5 ${isDownloading ? 'animate-bounce' : ''}`} />
+              <span>{isDownloading ? 'Preparing PDF...' : 'Download PDF'}</span>
             </button>
             <button
               onClick={handlePrint}

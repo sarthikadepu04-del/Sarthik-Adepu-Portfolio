@@ -1,18 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function ScrollProgress() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let ticking = false;
+
+    const updateProgress = () => {
+      if (barRef.current) {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = totalHeight > 0 ? Math.min(1, Math.max(0, window.scrollY / totalHeight)) : 0;
+        barRef.current.style.transform = `scaleX(${progress})`;
+      }
+      ticking = false;
+    };
+
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        const progress = (window.scrollY / totalHeight) * 100;
-        setScrollProgress(Math.min(100, Math.max(0, progress)));
+      if (!ticking) {
+        requestAnimationFrame(updateProgress);
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    updateProgress();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -22,8 +33,9 @@ export default function ScrollProgress() {
       aria-hidden="true"
     >
       <div
-        className="h-full bg-gradient-to-r from-[#FF8A65] via-[#FF9E7D] to-[#E66840] transition-all duration-100 ease-out"
-        style={{ width: `${scrollProgress}%` }}
+        ref={barRef}
+        className="h-full w-full bg-gradient-to-r from-[#FF8A65] via-[#FF9E7D] to-[#E66840] origin-left will-change-transform"
+        style={{ transform: 'scaleX(0)' }}
       />
     </div>
   );
