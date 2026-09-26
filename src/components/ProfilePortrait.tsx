@@ -1,10 +1,7 @@
-import { useState } from 'react';
-import { Sparkles, Image as ImageIcon } from 'lucide-react';
-import profilePhoto from '../assets/sarthik-profile.jpg';
+import { Sparkles } from 'lucide-react';
+import profilePhoto from '../sarthik-profile.jpg.png';
 
 export default function ProfilePortrait() {
-  const [hasPhotoLoaded, setHasPhotoLoaded] = useState(false);
-
   return (
     <div className="relative group w-full max-w-[340px] sm:max-w-[390px] lg:max-w-[420px] mx-auto select-none py-4 px-2">
       {/* 1. Soft Peach Gradient Halo / Glow behind the composition */}
@@ -102,39 +99,15 @@ export default function ProfilePortrait() {
 
         <div className="relative p-2 rounded-[26px] bg-gradient-to-b from-[#FFF9F6] via-[#FFEDE6] to-[#FFE2D6] border border-[#FFC8B8]">
           <div className="relative rounded-[19px] overflow-hidden bg-[#FAF3EC] border border-[#FFBCA6]/70 shadow-inner">
-            <div className="relative w-full aspect-[3/4.1] overflow-hidden flex flex-col items-center justify-center bg-[#FAF3EC]">
-              {/* Static imported profile photo */}
+            <div className="relative w-full aspect-[3/4.1] overflow-hidden flex items-center justify-center bg-[#FAF3EC]">
+              {/* Exact photograph imported from src/sarthik-profile.jpg.png */}
               <img
                 src={profilePhoto}
                 alt="Sarthik Adepu"
-                onLoad={(e) => {
-                  const target = e.currentTarget;
-                  if (target.naturalWidth > 1) {
-                    setHasPhotoLoaded(true);
-                  }
-                }}
-                className={`w-full h-full object-cover object-top select-none ${hasPhotoLoaded ? 'block' : 'hidden'}`}
+                className="w-full h-full object-cover object-top select-none"
                 loading="eager"
                 decoding="async"
               />
-
-              {/* Requirement #10: Clearly marked state awaiting the original photograph file asset */}
-              {!hasPhotoLoaded && (
-                <div className="flex flex-col items-center justify-center p-6 text-center text-[#6A4E42]">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFE8DF] border border-[#FFCBB8] flex items-center justify-center text-[#E66840] mb-3 shadow-xs">
-                    <ImageIcon className="w-6 h-6" />
-                  </div>
-                  <p className="font-semibold text-sm text-[#3D251C] mb-1">
-                    Sarthik Adepu
-                  </p>
-                  <p className="text-xs text-[#8C6B5E] max-w-[220px] leading-relaxed mb-3">
-                    Awaiting supplied photograph file asset
-                  </p>
-                  <code className="text-[11px] font-mono bg-white/90 px-2.5 py-1 rounded-md border border-[#FFC8B8] text-[#B8401C]">
-                    src/assets/sarthik-profile.jpg
-                  </code>
-                </div>
-              )}
             </div>
           </div>
         </div>
