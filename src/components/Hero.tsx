@@ -1,27 +1,14 @@
 import React from 'react';
-import { ArrowDown, Download, Send, Sparkles, Code2, Brain, FileText, ArrowRight } from 'lucide-react';
+import { ArrowDown, Send, Sparkles, Code2, Brain, ArrowRight } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import ProfilePortrait from './ProfilePortrait';
 import RevealOnScroll from './RevealOnScroll';
 
 interface HeroProps {
-  onOpenResume: () => void;
   onOpenAiChat?: () => void;
 }
 
-export default function Hero({ onOpenResume, onOpenAiChat }: HeroProps) {
-  const [isDownloading, setIsDownloading] = React.useState(false);
-
-  const handleDownloadResume = async () => {
-    if (isDownloading) return;
-    setIsDownloading(true);
-    try {
-      const { downloadResumePdf } = await import('../utils/generateResumePdf');
-      downloadResumePdf();
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+export default function Hero({ onOpenAiChat }: HeroProps) {
   const scrollToProjects = (e: React.MouseEvent) => {
     e.preventDefault();
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -119,49 +106,26 @@ export default function Hero({ onOpenResume, onOpenAiChat }: HeroProps) {
               </div>
             </RevealOnScroll>
 
-            {/* Primary, Secondary & Additional CTAs */}
+            {/* Primary & Additional CTAs */}
             <RevealOnScroll direction="up" delay={420}>
               <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 {/* Primary CTA */}
                 <button
                   onClick={scrollToProjects}
                   type="button"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#FF8A65] to-[#E66840] hover:from-[#E66840] hover:to-[#D4552E] text-white font-semibold text-sm shadow-[0_6px_20px_rgba(230,104,64,0.28)] hover:shadow-[0_8px_25px_rgba(230,104,64,0.38)] hover:-translate-y-0.5 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#FF8A65] to-[#E66840] hover:from-[#E66840] hover:to-[#D4552E] text-white font-semibold text-sm shadow-[0_6px_20px_rgba(230,104,64,0.28)] hover:shadow-[0_8px_25px_rgba(230,104,64,0.38)] hover:-translate-y-0.5 transition-all cursor-pointer"
                 >
                   <span>View My Work</span>
                   <ArrowDown className="w-4 h-4" />
-                </button>
-
-                {/* View Resume Option */}
-                <button
-                  onClick={onOpenResume}
-                  type="button"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white hover:bg-[#FFF5F0] text-[#473026] border border-[#FFD0C0] font-semibold text-sm shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer"
-                  title="View one-page ATS resume in preview modal"
-                >
-                  <FileText className="w-4 h-4 text-[#E66840]" />
-                  <span>View Resume</span>
-                </button>
-
-                {/* Download Resume Option */}
-                <button
-                  onClick={handleDownloadResume}
-                  disabled={isDownloading}
-                  type="button"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#FFF2EB] hover:bg-[#FFE6DC] text-[#3D2218] border border-[#FFCBB8] font-semibold text-sm shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer disabled:opacity-70"
-                  title="Download ATS-friendly PDF resume"
-                >
-                  <Download className={`w-4 h-4 text-[#E66840] ${isDownloading ? 'animate-bounce' : ''}`} />
-                  <span>{isDownloading ? 'Preparing...' : 'Download Resume'}</span>
                 </button>
 
                 {/* Additional CTA */}
                 <button
                   onClick={scrollToContact}
                   type="button"
-                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl text-[#7F503E] hover:text-[#2A160E] hover:bg-[#FFEFE8]/70 font-semibold text-sm transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-[#FFF5F0] text-[#473026] border border-[#FFD0C0] font-semibold text-sm shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
                 >
-                  <Send className="w-3.5 h-3.5 text-[#FF8A65]" />
+                  <Send className="w-4 h-4 text-[#FF8A65]" />
                   <span>Let's Connect</span>
                 </button>
               </div>

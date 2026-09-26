@@ -1,6 +1,6 @@
 import React from 'react';
-import { Calendar, CheckCircle2, ArrowRight } from 'lucide-react';
-import { EXPERIENCE_DATA } from '../data/portfolioData';
+import { Calendar, CheckCircle2, ArrowRight, Sparkles, Bot, Presentation } from 'lucide-react';
+import { EXPERIENCE_DATA, WORKSHOPS_DATA } from '../data/portfolioData';
 import RevealOnScroll from './RevealOnScroll';
 
 export default function Experience() {
@@ -8,6 +8,8 @@ export default function Experience() {
     e.preventDefault();
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const activityIcons = [Sparkles, Bot];
 
   return (
     <section id="experience" className="py-20 sm:py-24 bg-[#FFF9F6] border-y border-[#F3E5DD]">
@@ -42,7 +44,7 @@ export default function Experience() {
               <RevealOnScroll key={index} direction="up" delay={150}>
                 <div className="relative pl-12 sm:pl-20 group">
                   {/* Node icon */}
-                  <div className="absolute left-1.5 sm:left-4.5 top-1.5 w-6 h-6 rounded-full bg-[#E66840] border-4 border-[#FFF9F6] shadow-sm flex items-center justify-center -translate-x-1/2">
+                  <div className="absolute left-1.5 sm:left-4.5 top-1.5 w-6 h-6 rounded-full bg-[#E66840] border-4 border-[#FFF9F6] shadow-xs flex items-center justify-center -translate-x-1/2">
                     <div className="w-2 h-2 rounded-full bg-white" />
                   </div>
 
@@ -100,6 +102,42 @@ export default function Experience() {
               </RevealOnScroll>
             ))}
           </div>
+        </div>
+
+        {/* Existing Activities & Workshops Sub-block */}
+        <div className="mt-16 pt-12 border-t border-[#F0DDD2] max-w-4xl">
+          <RevealOnScroll direction="up">
+            <div className="mb-6">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#8C5542] block mb-1">
+                Activities & Community Participation
+              </span>
+              <h3 className="text-xl sm:text-2xl font-bold text-[#2A1B14]">
+                Technical Workshops & Seminars
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {WORKSHOPS_DATA.map((item, index) => {
+                const Icon = activityIcons[index % activityIcons.length] || Presentation;
+                return (
+                  <div
+                    key={item.title}
+                    className="bg-white rounded-2xl p-5 sm:p-6 border border-[#F2DDD3] hover:border-[#FFA587] shadow-2xs hover:shadow-xs transition-all flex items-start gap-3.5"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FFF0EB] to-[#FFE2D6] border border-[#FFD0BE] flex items-center justify-center text-[#E66840] shrink-0">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm sm:text-base font-bold text-[#2A1B14]">{item.title}</h4>
+                      <p className="text-xs text-[#59443B] mt-1.5 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </RevealOnScroll>
         </div>
       </div>
     </section>
