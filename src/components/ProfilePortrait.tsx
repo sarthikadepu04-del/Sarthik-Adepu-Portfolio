@@ -1,61 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Camera, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Sparkles, Image as ImageIcon } from 'lucide-react';
+import profilePhoto from '../assets/sarthik-profile.jpg';
 
 export default function ProfilePortrait() {
-  const [photoSrc, setPhotoSrc] = useState<string>('/image.png');
-  const [triedFallback, setTriedFallback] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Initialize from localStorage if the user previously dropped/selected a custom file
-  useEffect(() => {
-    try {
-      const savedPhoto = localStorage.getItem('sarthik_profile_photo');
-      if (savedPhoto) {
-        setPhotoSrc(savedPhoto);
-      }
-    } catch {
-      // Ignore localStorage access issues
-    }
-  }, []);
-
-  const handleImageError = () => {
-    if (!triedFallback) {
-      setTriedFallback(true);
-      setPhotoSrc('/profile.png');
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          setPhotoSrc(result);
-          try {
-            localStorage.setItem('sarthik_profile_photo', result);
-          } catch {
-            // Storage limit reached or private mode
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const [hasPhotoLoaded, setHasPhotoLoaded] = useState(false);
 
   return (
     <div className="relative group w-full max-w-[340px] sm:max-w-[390px] lg:max-w-[420px] mx-auto select-none py-4 px-2">
-      {/* Hidden file input for seamless photo testing/customization if desired */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-        aria-label="Upload profile photo"
-      />
-
       {/* 1. Soft Peach Gradient Halo / Glow behind the composition */}
       <div
         className="absolute -inset-4 sm:-inset-6 bg-gradient-to-tr from-[#FF9E7D]/35 via-[#FFD3C4]/40 to-[#FF7A50]/25 rounded-[44px] blur-2xl -z-20 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-95"
@@ -94,7 +45,6 @@ export default function ProfilePortrait() {
       </svg>
 
       {/* 3. Minimal Peach Decorative Dots, Lines & Crosshairs */}
-      {/* Top-Right Decorative Alignment Crosshair */}
       <div
         className="absolute -top-1 right-4 flex items-center gap-1 pointer-events-none z-10 opacity-75 transition-transform duration-500 ease-out group-hover:translate-x-1"
         aria-hidden="true"
@@ -103,18 +53,16 @@ export default function ProfilePortrait() {
         <span className="w-1.5 h-1.5 rounded-full bg-[#E66840]" />
       </div>
 
-      {/* Left-Edge Decorative Vertical Line & Dots */}
       <div
         className="absolute top-1/2 -left-2 -translate-y-1/2 flex flex-col items-center gap-1.5 pointer-events-none z-10 opacity-70 transition-transform duration-500 ease-out group-hover:-translate-x-1"
         aria-hidden="true"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#FF9E7D]" />
-        <span className="h-6 w-[1.5px] bg-gradient-to-b from-[#FF9E7D] to-transparent" />
-        <span className="w-1 h-1 rounded-full bg-[#FFA07A]" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#FF8A65]" />
+        <span className="h-8 w-[1px] bg-gradient-to-b from-[#FF8A65] to-transparent" />
+        <span className="w-1 h-1 rounded-full bg-[#E66840]" />
       </div>
 
-      {/* 4. Subtle Floating Technology Elements (Gentle Parallax on hover) */}
-      {/* "AI" chip - Top Left */}
+      {/* 4. Subtle Floating Technology Elements */}
       <div
         className="absolute -top-2 left-2 z-20 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-[#FFD0BE] text-[11px] font-extrabold text-[#8C432A] shadow-xs transition-transform duration-500 ease-out group-hover:-translate-y-1.5 group-hover:-translate-x-1"
         aria-hidden="true"
@@ -124,7 +72,6 @@ export default function ProfilePortrait() {
         </span>
       </div>
 
-      {/* "</>" Code chip - Top Right */}
       <div
         className="absolute -top-1.5 -right-1 z-20 px-2.5 py-1 rounded-lg bg-gradient-to-tr from-[#FF8A65] to-[#FFA07A] text-white text-[11px] font-mono font-bold shadow-xs transition-transform duration-500 ease-out group-hover:-translate-y-1.5 group-hover:translate-x-1"
         aria-hidden="true"
@@ -132,7 +79,6 @@ export default function ProfilePortrait() {
         &lt;/&gt;
       </div>
 
-      {/* "Python" chip - Right Side */}
       <div
         className="absolute top-1/3 -right-4 sm:-right-5 z-20 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md border border-[#FFC8B8] text-[10px] font-bold text-[#593E32] shadow-xs transition-transform duration-500 ease-out group-hover:translate-x-1.5 group-hover:-translate-y-0.5"
         aria-hidden="true"
@@ -140,7 +86,6 @@ export default function ProfilePortrait() {
         Python
       </div>
 
-      {/* "C++" chip - Left Side */}
       <div
         className="absolute bottom-1/3 -left-4 sm:-left-5 z-20 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md border border-[#FFC8B8] text-[10px] font-bold text-[#593E32] shadow-xs transition-transform duration-500 ease-out group-hover:-translate-x-1.5 group-hover:translate-y-0.5"
         aria-hidden="true"
@@ -148,58 +93,48 @@ export default function ProfilePortrait() {
         C++
       </div>
 
-      {/* "ML" chip - Bottom Right */}
-      <div
-        className="absolute bottom-14 -right-2 z-20 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-[#FFD0BE] text-[11px] font-extrabold text-[#8C432A] shadow-xs transition-transform duration-500 ease-out group-hover:translate-x-1 group-hover:translate-y-1"
-        aria-hidden="true"
-      >
-        ML
-      </div>
-
-      {/* 5. Subtle Cream Glass-Style Backing Card */}
-      <div className="relative rounded-[32px] p-2 sm:p-2.5 bg-white/65 backdrop-blur-md border border-[#F3DFD5] shadow-[0_20px_45px_-12px_rgba(230,104,64,0.16)] transition-all duration-500 ease-out group-hover:-translate-y-1.5 group-hover:shadow-[0_28px_60px_-15px_rgba(230,104,64,0.28)] group-hover:border-[#FFA587]">
-        {/* Asymmetrical creative peach corner bracket - top right */}
+      {/* 5. Main Hero Profile Frame: Layered borders, cream backing card & static photo */}
+      <div className="relative">
         <div
-          className="absolute -top-1.5 -right-1.5 w-7 h-7 border-t-2 border-r-2 border-[#FF8A65] rounded-tr-xl pointer-events-none z-10 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="absolute -inset-2 rounded-[32px] bg-[#FFF5EE] border border-[#F2DFD7] shadow-sm -rotate-1 transition-transform duration-500 ease-out group-hover:rotate-0"
           aria-hidden="true"
         />
 
-        {/* Asymmetrical creative peach corner bracket - bottom left */}
-        <div
-          className="absolute -bottom-1.5 -left-1.5 w-7 h-7 border-b-2 border-l-2 border-[#FF8A65] rounded-bl-xl pointer-events-none z-10 transition-transform duration-500 group-hover:-translate-x-0.5 group-hover:translate-y-0.5"
-          aria-hidden="true"
-        />
-
-        {/* Elegant Layered Peach Border around the photo */}
         <div className="relative p-2 rounded-[26px] bg-gradient-to-b from-[#FFF9F6] via-[#FFEDE6] to-[#FFE2D6] border border-[#FFC8B8]">
-          {/* Inner hairline border bezel */}
           <div className="relative rounded-[19px] overflow-hidden bg-[#FAF3EC] border border-[#FFBCA6]/70 shadow-inner">
-            {/* Exact Photograph - Aspect Ratio 3:4.1 preserves head, arms, posture, shirt, and background */}
-            {/* The photo remains 100% STABLE on hover (transform-none scale-100) */}
-            <div className="relative w-full aspect-[3/4.1] overflow-hidden flex items-center justify-center bg-[#FAF3EC]">
+            <div className="relative w-full aspect-[3/4.1] overflow-hidden flex flex-col items-center justify-center bg-[#FAF3EC]">
+              {/* Static imported profile photo */}
               <img
-                src={photoSrc}
-                alt="Sarthik Adepu - CSE (AI & ML) Student & Aspiring Software Developer"
-                className="w-full h-full object-cover object-top select-none transform-none"
-                style={{
-                  filter: 'none',
-                  WebkitFilter: 'none',
+                src={profilePhoto}
+                alt="Sarthik Adepu"
+                onLoad={(e) => {
+                  const target = e.currentTarget;
+                  if (target.naturalWidth > 1) {
+                    setHasPhotoLoaded(true);
+                  }
                 }}
-                onError={handleImageError}
+                className={`w-full h-full object-cover object-top select-none ${hasPhotoLoaded ? 'block' : 'hidden'}`}
                 loading="eager"
                 decoding="async"
               />
 
-              {/* Optional quick photo replacement button on hover */}
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                title="Click to select another photo from your device"
-                aria-label="Upload photo"
-                className="absolute bottom-2.5 right-2.5 p-2 rounded-xl bg-white/90 hover:bg-white text-[#523A30] hover:text-[#E66840] shadow-md border border-[#FFD0BE] opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
-              >
-                <Camera className="w-3.5 h-3.5" />
-              </button>
+              {/* Requirement #10: Clearly marked state awaiting the original photograph file asset */}
+              {!hasPhotoLoaded && (
+                <div className="flex flex-col items-center justify-center p-6 text-center text-[#6A4E42]">
+                  <div className="w-12 h-12 rounded-2xl bg-[#FFE8DF] border border-[#FFCBB8] flex items-center justify-center text-[#E66840] mb-3 shadow-xs">
+                    <ImageIcon className="w-6 h-6" />
+                  </div>
+                  <p className="font-semibold text-sm text-[#3D251C] mb-1">
+                    Sarthik Adepu
+                  </p>
+                  <p className="text-xs text-[#8C6B5E] max-w-[220px] leading-relaxed mb-3">
+                    Awaiting supplied photograph file asset
+                  </p>
+                  <code className="text-[11px] font-mono bg-white/90 px-2.5 py-1 rounded-md border border-[#FFC8B8] text-[#B8401C]">
+                    src/assets/sarthik-profile.jpg
+                  </code>
+                </div>
+              )}
             </div>
           </div>
         </div>

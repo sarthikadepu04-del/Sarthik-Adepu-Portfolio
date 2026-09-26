@@ -1,6 +1,8 @@
 {
-  "name": "Sarthik Adepu - Portfolio",
-  "description": "Personal portfolio website of Sarthik Adepu, CSE (AI & ML) student and aspiring software developer at Marwadi University.",
+  "name": "Sarthik Adepu | CSE (AI & ML) Student | Software Developer",
+  "description": "Sarthik Adepu is a CSE (AI & ML) student and aspiring software developer specializing in Python, C++, web development, AI and machine learning.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
