@@ -2,6 +2,8 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import path from 'path';
+import { GoogleGenAI } from '@google/genai';
+import { PORTFOLIO_KNOWLEDGE_PROMPT, getLocalGroundedAnswer } from './src/data/portfolioKnowledge';
 
 dotenv.config();
 
@@ -61,6 +63,75 @@ app.post('/api/contact', async (req, res) => {
     success: true,
     message: 'Thank you for reaching out! Your message has been received.',
     receivedAt: new Date().toISOString(),
+  });
+});
+
+// Real API endpoint for Ask Sarthik AI Assistant
+app.post('/api/chat', async (req, res) => {
+  const { message, history } = req.body || {};
+
+  if (!message || typeof message !== 'string' || !message.trim()) {
+    return res.status(400).json({ error: 'A message prompt is required.' });
+  }
+
+  const trimmed = message.trim();
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (apiKey) {
+    try {
+      const ai = new GoogleGenAI({
+        apiKey,
+        httpOptions: {
+          headers: {
+            'User-Agent': 'aistudio-build',
+          },
+        },
+      });
+
+      const contents: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }> = [];
+
+      if (Array.isArray(history)) {
+        for (const item of history.slice(-6)) {
+          if (item && item.text) {
+            contents.push({
+              role: item.sender === 'user' ? 'user' : 'model',
+              parts: [{ text: item.text }],
+            });
+          }
+        }
+      }
+
+      contents.push({
+        role: 'user',
+        parts: [{ text: trimmed }],
+      });
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents,
+        config: {
+          systemInstruction: PORTFOLIO_KNOWLEDGE_PROMPT,
+          temperature: 0.4,
+          maxOutputTokens: 600,
+        },
+      });
+
+      const reply = response.text?.trim();
+      if (reply) {
+        return res.status(200).json({ reply, source: 'gemini' });
+      }
+    } catch (err) {
+      console.error('Gemini API invocation error:', err);
+      return res.status(200).json({
+        reply: getLocalGroundedAnswer(trimmed),
+        source: 'grounded-fallback',
+      });
+    }
+  }
+
+  return res.status(200).json({
+    reply: getLocalGroundedAnswer(trimmed),
+    source: 'grounded-portfolio',
   });
 });
 

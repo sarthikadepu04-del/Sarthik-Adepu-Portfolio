@@ -1,4 +1,4 @@
-import { Brain, Globe, Cpu, Sparkles } from 'lucide-react';
+import { Brain, Globe, Cpu, Sparkles, Lightbulb, Code2, Rocket, ArrowRight } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 interface WhatIBuildItem {
@@ -35,6 +35,33 @@ const ITEMS: WhatIBuildItem[] = [
   },
 ];
 
+const JOURNEY_STEPS = [
+  {
+    emoji: '💡',
+    title: 'Ideas',
+    subtitle: 'Curiosity & Purpose',
+    icon: Lightbulb,
+  },
+  {
+    emoji: '💻',
+    title: 'Code',
+    subtitle: 'Clean Architectures',
+    icon: Code2,
+  },
+  {
+    emoji: '🤖',
+    title: 'Intelligence',
+    subtitle: 'AI & ML Integrations',
+    icon: Brain,
+  },
+  {
+    emoji: '🚀',
+    title: 'Real Products',
+    subtitle: 'Deployed & Accessible',
+    icon: Rocket,
+  },
+];
+
 export default function WhatIBuild() {
   return (
     <section id="what-i-build" className="py-20 sm:py-24 bg-[#FAF7F2]">
@@ -50,13 +77,47 @@ export default function WhatIBuild() {
               What I Build
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[#6E5549]">
-              Turning ideas, curiosity, and technology into practical digital experiences.
+              Turning curiosity into code, and ideas into intelligent experiences.
             </p>
           </div>
         </RevealOnScroll>
 
+        {/* Compact Visual Journey: Ideas -> Code -> Intelligence -> Real Products */}
+        <RevealOnScroll direction="up" delay={100}>
+          <div className="mt-8 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#FFF5F0] via-[#FFEDE6] to-[#FFE8DE] border border-[#FFD0BE] shadow-xs">
+            <div className="text-center mb-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#8C432A]">
+                The Engineering Journey
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 relative">
+              {JOURNEY_STEPS.map((step, idx) => (
+                <div
+                  key={step.title}
+                  className="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-white/95 border border-[#FFD3C4] shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-[#FFF0EB] border border-[#FFCBB8] flex items-center justify-center text-lg shrink-0">
+                    <span role="img" aria-label={step.title}>
+                      {step.emoji}
+                    </span>
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-xs sm:text-sm font-extrabold text-[#261A14] block truncate">
+                      {step.title}
+                    </span>
+                    <span className="text-[10px] sm:text-[11px] text-[#7A6358] block truncate">
+                      {step.subtitle}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </RevealOnScroll>
+
         {/* 4 Cards Grid */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {ITEMS.map((item, index) => {
             const Icon = item.icon;
             return (

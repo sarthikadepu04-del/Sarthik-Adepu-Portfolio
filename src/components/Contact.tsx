@@ -129,6 +129,27 @@ export default function Contact() {
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Direct Info & Social Connections (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
+            <RevealOnScroll direction="up" delay={50}>
+              {/* Availability Card */}
+              <div className="bg-gradient-to-r from-[#FFF5F0] via-[#FFEDE6] to-[#FFE2D6] rounded-2xl p-5 border border-[#FFCBB8] shadow-2xs">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF8A65] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E66840]" />
+                  </span>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#8C432A]">
+                    Open to Opportunities
+                  </span>
+                </div>
+                <p className="text-xs font-semibold text-[#3D251C]">
+                  Internships · Projects · Collaboration
+                </p>
+                <p className="mt-1 text-[11px] text-[#7A6358] leading-relaxed">
+                  Actively open to software development and AI/ML internship opportunities for hands-on engineering growth.
+                </p>
+              </div>
+            </RevealOnScroll>
+
             <RevealOnScroll direction="up" delay={100}>
               {/* Email Card with Copy button */}
               <div className="bg-white rounded-2xl p-6 border border-[#F2DDD3] shadow-xs">

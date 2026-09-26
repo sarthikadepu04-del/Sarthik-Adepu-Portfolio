@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://sarthikadepu.vercel.app/sitemap.xml
+Sitemap: https://sarthik-adepu-portfolio.vercel.app/sitemap.xml

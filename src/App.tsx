@@ -19,12 +19,25 @@ import PreContactCTA from './components/PreContactCTA';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FloatingMobileContact from './components/FloatingMobileContact';
+import FixedSarthikAiLauncher from './components/FixedSarthikAiLauncher';
 
-// Code-split heavy Resume modal
+// Code-split heavy modals to ensure lightning-fast initial load
 const ResumeModal = lazy(() => import('./components/ResumeModal'));
+const AskSarthikAiModal = lazy(() => import('./components/AskSarthikAiModal'));
 
 export default function App() {
   const [resumeOpen, setResumeOpen] = useState(false);
+  const [aiChatOpen, setAiChatOpen] = useState(false);
+  const [aiInitialPrompt, setAiInitialPrompt] = useState<string | undefined>(undefined);
+
+  const handleOpenAiChat = (initialPrompt?: string) => {
+    setAiInitialPrompt(initialPrompt);
+    setAiChatOpen(true);
+  };
+
+  const handleToggleAiChat = () => {
+    setAiChatOpen((prev) => !prev);
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#241F1C] font-sans relative selection:bg-[#FFD3C4] selection:text-[#3B1E12]">
@@ -35,20 +48,26 @@ export default function App() {
       <SubtlePeachSparkles />
 
       {/* Sticky Header Navigation */}
-      <Navbar onOpenResume={() => setResumeOpen(true)} />
+      <Navbar
+        onOpenResume={() => setResumeOpen(true)}
+        onOpenAiChat={() => handleOpenAiChat()}
+      />
 
       {/* Main Landmark */}
       <main id="main-content">
-        {/* Hero Section */}
-        <Hero onOpenResume={() => setResumeOpen(true)} />
+        {/* Hero Section with integrated AI assistant cue */}
+        <Hero
+          onOpenResume={() => setResumeOpen(true)}
+          onOpenAiChat={() => handleOpenAiChat()}
+        />
 
         {/* About Section */}
         <About />
 
-        {/* 1. What I Build Section (Immediately after About) */}
+        {/* 1. What I Build Section (Visual Journey & Core Focus) */}
         <WhatIBuild />
 
-        {/* 2. Currently Exploring Marquee Strip (Right above Skills) */}
+        {/* 2. Currently Exploring Track (Verified Learning Areas) */}
         <CurrentlyExploring />
 
         {/* Skills Section */}
@@ -57,10 +76,10 @@ export default function App() {
         {/* Experience Section */}
         <Experience />
 
-        {/* Featured Projects Section with Enhanced Filters */}
-        <Projects />
+        {/* Featured Projects Section with Interactive Explorer & Ask AI */}
+        <Projects onAskAi={handleOpenAiChat} />
 
-        {/* 5. Building In Public (GitHub Repositories) Section */}
+        {/* Building In Public (GitHub Repositories) Section */}
         <BuildingInPublic />
 
         {/* Certifications Section */}
@@ -69,16 +88,16 @@ export default function App() {
         {/* Workshops & Activities Section */}
         <Workshops />
 
-        {/* 4. Beyond Code Section (Immediately after Workshops & Activities) */}
+        {/* Beyond Code Section */}
         <BeyondCode />
 
         {/* Education Section */}
         <Education />
 
-        {/* 3. My Roadmap Section */}
+        {/* Roadmap Section */}
         <Roadmap />
 
-        {/* 7. Final Call to Action ("Have an idea? Let's build it.") */}
+        {/* Final Call to Action */}
         <PreContactCTA />
 
         {/* Contact Section */}
@@ -95,7 +114,24 @@ export default function App() {
         </Suspense>
       )}
 
-      {/* Floating Contact Button — Mobile Devices Only */}
+      {/* Fixed Viewport-based Ask Sarthik AI Chat Panel (Lazy Loaded) */}
+      {aiChatOpen && (
+        <Suspense fallback={null}>
+          <AskSarthikAiModal
+            isOpen={aiChatOpen}
+            onClose={() => setAiChatOpen(false)}
+            initialPrompt={aiInitialPrompt}
+          />
+        </Suspense>
+      )}
+
+      {/* Fixed Sarthik AI Viewport Launcher Button (Desktop: bottom-7 right-7; Mobile: bottom-20 right-4) */}
+      <FixedSarthikAiLauncher
+        isOpen={aiChatOpen}
+        onToggle={handleToggleAiChat}
+      />
+
+      {/* Mobile Floating Let's Talk CTA (Mobile only: bottom-5 right-4) */}
       <FloatingMobileContact />
     </div>
   );

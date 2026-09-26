@@ -1,14 +1,15 @@
 import React from 'react';
-import { ArrowDown, Download, Send, Sparkles, Code2, Brain, FileText } from 'lucide-react';
+import { ArrowDown, Download, Send, Sparkles, Code2, Brain, FileText, ArrowRight } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import ProfilePortrait from './ProfilePortrait';
 import RevealOnScroll from './RevealOnScroll';
 
 interface HeroProps {
   onOpenResume: () => void;
+  onOpenAiChat?: () => void;
 }
 
-export default function Hero({ onOpenResume }: HeroProps) {
+export default function Hero({ onOpenResume, onOpenAiChat }: HeroProps) {
   const [isDownloading, setIsDownloading] = React.useState(false);
 
   const handleDownloadResume = async () => {
@@ -164,6 +165,38 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   <span>Let's Connect</span>
                 </button>
               </div>
+
+              {/* Subtle Hero Visual Cue for Ask Sarthik AI */}
+              {onOpenAiChat && (
+                <div className="mt-6 pt-5 border-t border-[#F5E6DF] w-full max-w-xl">
+                  <button
+                    type="button"
+                    onClick={onOpenAiChat}
+                    className="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-start gap-4 p-3 pr-4 rounded-2xl bg-white/95 hover:bg-white border border-[#FFD0BE] hover:border-[#FF9E7D] shadow-2xs hover:shadow-xs transition-all text-left cursor-pointer active:scale-98"
+                    title="Open Ask Sarthik AI assistant"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FF8A65] to-[#FFA07A] text-white flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform shrink-0">
+                        <Sparkles className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs sm:text-sm font-extrabold text-[#261A14] group-hover:text-[#E66840] transition-colors">
+                            ✨ Ask Sarthik AI
+                          </span>
+                          <span className="px-1.5 py-0.5 rounded-full bg-[#FFF0EB] border border-[#FFD3C4] text-[10px] font-bold text-[#E66840]">
+                            Live Assistant
+                          </span>
+                        </div>
+                        <p className="text-[11px] sm:text-xs text-[#7A6358] mt-0.5">
+                          Explore my projects, skills &amp; journey.
+                        </p>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-[#C8A89C] group-hover:text-[#E66840] group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+                  </button>
+                </div>
+              )}
             </RevealOnScroll>
           </div>
 

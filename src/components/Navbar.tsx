@@ -4,6 +4,7 @@ import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface NavbarProps {
   onOpenResume: () => void;
+  onOpenAiChat?: () => void;
 }
 
 const NAV_ITEMS = [
@@ -12,13 +13,14 @@ const NAV_ITEMS = [
   { label: 'Skills', href: '#skills' },
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
+  { label: 'AI Assistant', href: '#ai-assistant' },
   { label: 'Certificates', href: '#certificates' },
   { label: 'Education', href: '#education' },
   { label: 'Roadmap', href: '#roadmap' },
   { label: 'Contact', href: '#contact' },
 ];
 
-export default function Navbar({ onOpenResume }: NavbarProps) {
+export default function Navbar({ onOpenResume, onOpenAiChat }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,6 +60,12 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
+    if (href === '#ai-assistant') {
+      if (onOpenAiChat) {
+        onOpenAiChat();
+      }
+      return;
+    }
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
